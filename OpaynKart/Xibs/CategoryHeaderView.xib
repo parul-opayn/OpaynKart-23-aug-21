@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Poppins-Regular.ttf">
+            <string>Poppins-Regular</string>
+        </array>
+        <array key="Poppins-SemiBold.ttf">
+            <string>Poppins-SemiBold</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="ProductHeaderView" customModule="OpaynKart" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="567" height="93"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="Recommended for you" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4jM-CK-Og8">
+                    <rect key="frame" x="8" y="8" width="551" height="25.5"/>
+                    <fontDescription key="fontDescription" name="Poppins-SemiBold" family="Poppins" pointSize="18"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Based on search" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="JNJ-Ov-1gn">
+                    <rect key="frame" x="8" y="41.5" width="551" height="43.5"/>
+                    <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="JNJ-Ov-1gn" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="8" id="2gV-er-EvE"/>
+                <constraint firstItem="4jM-CK-Og8" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="8" id="5BE-if-KRX"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="4jM-CK-Og8" secondAttribute="trailing" constant="8" id="A4G-6l-9N2"/>
+                <constraint firstItem="4jM-CK-Og8" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="8" id="e3d-oK-G5C"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="JNJ-Ov-1gn" secondAttribute="trailing" constant="8" id="hNz-WA-h0G"/>
+                <constraint firstItem="JNJ-Ov-1gn" firstAttribute="top" secondItem="4jM-CK-Og8" secondAttribute="bottom" constant="8" id="oPX-Fa-S3o"/>
+                <constraint firstAttribute="bottom" secondItem="JNJ-Ov-1gn" secondAttribute="bottom" constant="8" id="wdo-a4-ym2"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="descriptionLbl" destination="JNJ-Ov-1gn" id="lZP-nD-rp4"/>
+                <outlet property="titleLbl" destination="4jM-CK-Og8" id="Z9E-O5-TfG"/>
+            </connections>
+            <point key="canvasLocation" x="81.884057971014499" y="62.611607142857139"/>
+        </view>
+    </objects>
+</document>

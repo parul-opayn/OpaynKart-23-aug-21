@@ -1,0 +1,6 @@
+framework module Pods_OpaynKartTests {
+  umbrella header "Pods-OpaynKartTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
