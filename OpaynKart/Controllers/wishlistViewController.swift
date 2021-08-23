@@ -57,6 +57,10 @@ extension wishlistViewController:UICollectionViewDelegate,UICollectionViewDataSo
     }
     
     
+    
+    
+
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if UIDevice.current.userInterfaceIdiom == .pad{
             return CGSize(width: wishlistCollectionView.bounds.width / 4 - 2, height: wishlistCollectionView.bounds.height / 4)
