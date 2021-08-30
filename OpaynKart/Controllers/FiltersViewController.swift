@@ -7,28 +7,43 @@
 
 import UIKit
 import DropDown
+import RangeSeekSlider
+
+protocol didApplyFilters {
+    func filtersData(data:[String:Any])
+}
 
 class FiltersViewController: UIViewController {
     
     //MARK:- IBOutlets
     
-    @IBOutlet weak var sliderValue: UILabel!
     @IBOutlet weak var sortByBtn: UIButton!
-    @IBOutlet weak var colorBtn: UIButton!
-    @IBOutlet weak var categoryBtn: UIButton!
     @IBOutlet weak var sortByValue: UILabel!
     @IBOutlet weak var colorValueLbl: UILabel!
     @IBOutlet weak var categoryValueLbl: UILabel!
+    @IBOutlet weak var slider: RangeSeekSlider!
+    @IBOutlet weak var subcategoryLbl: UILabel!
+    @IBOutlet weak var subCategoryView: UIView!
+    @IBOutlet weak var subCategoryViewHeight: NSLayoutConstraint!
     
     //MARK:- Variables
     
     let dropdown = DropDown()
     var sort = false
+    var viewController = UIViewController()
+    var homeViewModel = ProductsCategoryViewModel()
+    var delegate:didApplyFilters?
+    var categoriesData = [String]()
+    var subCategoriesData = [String]()
+    var subCatIds = [String]()
+    var selectedCatId = ""
+    var selectedSubCatId = ""
     
     //MARK:- Life Cycle Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setUpData()
     }
     
     //MARK:- Custom Methods
@@ -43,15 +58,27 @@ class FiltersViewController: UIViewController {
         return sort
     }
     
+    func setUpData(){
+        if let parentCont = viewController as? ProductsCategoryViewController{
+            self.homeViewModel = parentCont.viewModel
+            self.categoriesData = self.homeViewModel.home?.categories?.map({$0.name ?? ""}) ?? []
+        }
+    }
+    
     //MARK:- Objc Methods
     
     //MARK:- IBActions
     
-    @IBAction func sliderValueChanged(_ sender: UISlider) {
-        sliderValue.text = String(format: "%.0f", sender.value)
-    }
-    
     @IBAction func tappedApplyFilter(_ sender: UIButton) {
+        homeViewModel.filters(minPrice: "\(Int(self.slider.selectedMinValue))", maxPrice: "\(Int(self.slider.selectedMaxValue))", categoryId: self.selectedCatId, subCategoryId: self.selectedSubCatId, search: "") { isSuccess, message in
+           
+            if isSuccess{
+                self.delegate?.filtersData(data: ["result":"success"])
+            }
+            else{
+                self.delegate?.filtersData(data: ["result":"fail"])
+            }
+        }
         self.dismiss(animated: true, completion: nil)
     }
     @IBAction func sortByDropDown(_ sender: UIButton) {
@@ -86,7 +113,7 @@ class FiltersViewController: UIViewController {
         
     }
     @IBAction func tappedCategoryBtn(_ sender: UIButton) {
-        dropdown.dataSource = ["Men","Women","Children"]
+        dropdown.dataSource = self.categoriesData
         dropdown.anchorView = sender
         dropdown.direction = .any
         dropdown.bottomOffset = CGPoint(x: 0, y:sender.frame.size.height)
@@ -97,8 +124,38 @@ class FiltersViewController: UIViewController {
             [weak self] (index:Int,item:String) in
             guard let self = self else{return}
             self.categoryValueLbl.text  = item
+            let subCat = self.homeViewModel.home?.categories?[index].subCategories?.map({$0.name ?? ""}) ?? []
+            self.subCategoriesData = subCat
+            self.subCatIds = self.homeViewModel.home?.categories?[index].subCategories?.map({$0.id ?? ""}) ?? []
+            self.selectedCatId = self.homeViewModel.home?.categories?[index].id ?? ""
+            
+            if subCat.count == 0{
+                self.subCategoryView.isHidden = true
+                self.subCategoryViewHeight.constant = 0
+            }
+            else{
+                self.subCategoryView.isHidden = false
+                self.subCategoryViewHeight.constant = 70
+            }
         }
     }
+    
+    @IBAction func tappedSubCategoryBtn(_ sender: UIButton) {
+        dropdown.dataSource = self.subCategoriesData
+        dropdown.anchorView = sender
+        dropdown.direction = .any
+        dropdown.bottomOffset = CGPoint(x: 0, y:sender.frame.size.height)
+        dropdown.width = sender.frame.width
+        dropdown.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        dropdown.show()
+        dropdown.selectionAction = {
+            [weak self] (index:Int,item:String) in
+            guard let self = self else{return}
+            self.subcategoryLbl.text  = item
+            self.selectedSubCatId = self.subCatIds[index]
+        }
+    }
+    
     @IBAction func tappedView(_ sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }

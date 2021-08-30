@@ -301,6 +301,7 @@ extension ProductDetailsViewController{
             Indicator.shared.hideProgressView()
             if isSuccess{
                 self.showToast(message: "Product added to cart.")
+                self.tabBarController?.selectedIndex = 1
             }
             else{
                 self.showToast(message: message)

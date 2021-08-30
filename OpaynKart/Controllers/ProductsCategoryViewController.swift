@@ -9,9 +9,9 @@ import UIKit
 import SDWebImage
 
 class ProductsCategoryViewController: UIViewController{
-   
+    
     //MARK:- IBOutlets
-   
+    
     @IBOutlet weak var categoryCollectionView: UICollectionView!
     @IBOutlet weak var bannerCollectionView: UICollectionView!
     @IBOutlet weak var bannerPageControl: UIPageControl!
@@ -24,6 +24,8 @@ class ProductsCategoryViewController: UIViewController{
     var searchBar = UISearchBar()
     var searchTextField = UITextField()
     var viewModel = ProductsCategoryViewModel()
+    var cartViewModel = CartViewModel()
+    let refershControl = UIRefreshControl()
     
     //MARK:- Life Cycle Methods
     
@@ -39,6 +41,9 @@ class ProductsCategoryViewController: UIViewController{
         homeAPI()
         productsAPI(type: "trending")
         NotificationCenter.default.addObserver(self, selector: #selector(isTokenExpired), name: .expiredToken, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(didCartUpdate), name: .updateCartValue, object: nil)
+        refershControl.addTarget(self, action: #selector(refreshView(refresh:)), for: .editingChanged)
+        self.productsCollectionView.refreshControl = self.refershControl
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -58,11 +63,12 @@ class ProductsCategoryViewController: UIViewController{
         searchTextField.delegate = self
         searchTextField.backgroundColor = UIColor(named: "AppLightGray")
         searchTextField.layer.cornerRadius = 8
+        searchTextField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
         let imageView = UIImageView(frame: CGRect(x: 8.0, y: 10, width: 20.0, height: 20.0))
         let image = #imageLiteral(resourceName: "miniSearch")
         imageView.image = image
         imageView.contentMode = .scaleAspectFit
-
+        
         let view = UIView(frame: CGRect(x: 0, y: 0, width: 32, height: 40))
         view.addSubview(imageView)
         searchTextField.leftViewMode = .always
@@ -72,8 +78,33 @@ class ProductsCategoryViewController: UIViewController{
     
     //MARK:- Objc Methods
     
+    @objc func didCartUpdate(sender:UIButton){
+        cartList()
+    }
+    
+    @objc func refreshView(refresh:UIRefreshControl){
+        if !productsCollectionView.isDragging {
+            print("refer")
+            self.refershControl.endRefreshing()
+            self.productsAPI(type: "trending")
+        }
+       
+        refresh.endRefreshing()
+    }
+    
     @objc func singleTap(sender: UITapGestureRecognizer) {
         self.searchBar.resignFirstResponder()
+    }
+    
+    @objc func textFieldEditingChanged(sender:UITextField){
+        viewModel.filters(minPrice: "", maxPrice: "", categoryId: "", subCategoryId: "", search: sender.text ?? "") { isSuccess, message in
+            if isSuccess{
+                self.productsCollectionView.reloadData()
+            }
+            else{
+                self.productsCollectionView.reloadData()
+            }
+        }
     }
     
     @objc func isTokenExpired(){
@@ -107,7 +138,7 @@ class ProductsCategoryViewController: UIViewController{
     
     //MARK:- IBActions
     
-
+    
 }
 
 //MARK:- CollectionView Delegates
@@ -123,11 +154,11 @@ extension ProductsCategoryViewController:UICollectionViewDelegate,UICollectionVi
         else{
             return viewModel.home?.categories?.count ?? 0
         }
-       
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-       
+        
         if collectionView == bannerCollectionView{
             let cell = self.bannerCollectionView.dequeueReusableCell(withReuseIdentifier: "WalkThroughTableViewCell", for: indexPath) as! WalkThroughTableViewCell
             cell.bannerImage.sd_setImage(with: URL(string: (viewModel.home?.banner?[indexPath.row].image ?? "")), placeholderImage: #imageLiteral(resourceName: "placeholder Image"), options: .highPriority, context: nil)
@@ -180,7 +211,7 @@ extension ProductsCategoryViewController:UICollectionViewDelegate,UICollectionVi
             else{
                 return CGSize(width: bannerCollectionView.bounds.width, height: bannerCollectionView.bounds.height)
             }
-          
+            
         }
         else if collectionView == productsCollectionView{
             if UIDevice.current.userInterfaceIdiom == .pad{
@@ -196,11 +227,11 @@ extension ProductsCategoryViewController:UICollectionViewDelegate,UICollectionVi
                 return CGSize(width: categoryCollectionView.bounds.width / 6 - 2, height: categoryCollectionView.bounds.height)
             }
             else{
-                    return CGSize(width: categoryCollectionView.bounds.width / 3 - 2, height: categoryCollectionView.bounds.height)
+                return CGSize(width: categoryCollectionView.bounds.width / 3 - 2, height: categoryCollectionView.bounds.height)
             }
             
         }
-       
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
@@ -240,9 +271,20 @@ extension ProductsCategoryViewController:UICollectionViewDelegate,UICollectionVi
                 self.bannerPageControl.currentPage = currentPage
             }
         }
-       
-       
     }
+    
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if  let collectionView = scrollView as? UICollectionView{
+            if collectionView == self.productsCollectionView{
+                if self.refershControl.isRefreshing == true {
+                    print("refer")
+                    self.refershControl.endRefreshing()
+                    self.productsAPI(type: "trending")
+                }
+            }
+            
+        }
+     }
 }
 
 //MARK:- UISearchBar Delegates
@@ -271,15 +313,15 @@ extension ProductsCategoryViewController:UISearchBarDelegate{
 extension ProductsCategoryViewController:UITextFieldDelegate{
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
+        //textField.resignFirstResponder()
         return true
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "SearchViewViewController") as! SearchViewViewController
-        textField.resignFirstResponder()
-        vc.modalPresentationStyle = .overCurrentContext
-        self.navigationController?.present(vc, animated: true, completion: nil)
+        //        let vc = self.storyboard?.instantiateViewController(withIdentifier: "SearchViewViewController") as! SearchViewViewController
+        //        textField.resignFirstResponder()
+        //        vc.modalPresentationStyle = .overCurrentContext
+        //        self.navigationController?.present(vc, animated: true, completion: nil)
     }
     
 }
@@ -318,7 +360,7 @@ extension ProductsCategoryViewController{
     }
     
     func wishlistAPI(productId:String,status:String,atIndex:Int){
-       // Indicator.shared.showProgressView(self.view)
+        // Indicator.shared.showProgressView(self.view)
         self.viewModel.wishlistItem(user_id:UserDefault.sharedInstance?.getUserDetails()?.id ?? "",product_id: productId,status: status){ isSuccess, message in
             //Indicator.shared.hideProgressView()
             if isSuccess{
@@ -347,5 +389,38 @@ extension ProductsCategoryViewController{
         }
     }
     
+    func cartList(){
+        
+        self.cartViewModel.cartData(){[weak self] isSuccess, message in
+            guard let self = self else{return}
+            
+            if isSuccess{
+                if self.cartViewModel.cartList?.data?.count ?? 0 == 0{
+                    if let tabItems = self.tabBarController?.tabBar.items {
+                        let tabItem = tabItems[1]
+                        tabItem.badgeValue = nil
+                    }
+                }
+                else{
+                    if let tabItems = self.tabBarController?.tabBar.items {
+                        let tabItem = tabItems[1]
+                        tabItem.badgeValue = "\(self.cartViewModel.cartList?.data?.count ?? 0)"
+                    }
+                }
+                
+            }
+        }
+    }
+    
 }
 
+
+//MARK:- Filters Delegates
+
+extension ProductsCategoryViewController:didApplyFilters{
+    func filtersData(data: [String : Any]) {
+        print(data["result"] as? String ?? "")
+        self.productsCollectionView.reloadData()
+    }
+    
+}

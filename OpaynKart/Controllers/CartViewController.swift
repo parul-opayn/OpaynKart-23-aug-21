@@ -150,12 +150,22 @@ extension CartViewController{
                 if self.viewModel.cartList?.data?.count ?? 0 == 0{
                     self.cartTableFooterView.isHidden = true
                     self.proceedBtn.isHidden = true
+                    if let tabItems = self.tabBarController?.tabBar.items {
+                        // In this case we want to modify the badge number of the third tab:
+                        let tabItem = tabItems[1]
+                        tabItem.badgeValue = nil
+                    }
                 }
                 else{
                     self.cartTableFooterView.isHidden = false
                     self.cartTableView.reloadData()
                     self.proceedBtn.isHidden = false
                    // self.updateTableHeight(tableName: self.cartTableView, tableHeight: self.cartTableHeight)
+                    if let tabItems = self.tabBarController?.tabBar.items {
+                        // In this case we want to modify the badge number of the third tab:
+                        let tabItem = tabItems[1]
+                        tabItem.badgeValue = "\(self.viewModel.cartList?.data?.count ?? 0)"
+                    }
                 }
                 self.cartTableView.reloadData()
                
@@ -180,10 +190,20 @@ extension CartViewController{
                 if self.viewModel.cartList?.data?.count ?? 0 == 0{
                     self.cartTableFooterView.isHidden = true
                     self.proceedBtn.isHidden = true
+                    if let tabItems = self.tabBarController?.tabBar.items {
+                        // In this case we want to modify the badge number of the third tab:
+                        let tabItem = tabItems[1]
+                        tabItem.badgeValue = nil
+                    }
                 }
                 else{
                     self.cartTableFooterView.isHidden = false
                     self.proceedBtn.isHidden = false
+                    if let tabItems = self.tabBarController?.tabBar.items {
+                        // In this case we want to modify the badge number of the third tab:
+                        let tabItem = tabItems[1]
+                        tabItem.badgeValue = "\(self.viewModel.cartList?.data?.count ?? 0)"
+                    }
                     //self.updateTableHeight(tableName: self.cartTableView, tableHeight: self.cartTableHeight)
                 }
                 self.cartTableView.reloadData()

@@ -99,6 +99,7 @@ class CartViewModel: BaseAPI {
             if responseCode == 1{
                 if let data = receivedData as? [String:Any]{
                     if data["code"] as? Int ?? -91 == 200{
+                        NotificationCenter.default.post(name: .updateCartValue, object: nil)
                         completion(true,message ?? "")
                     }
                     else{

@@ -211,6 +211,10 @@ extension UIViewController{
         // self.navigationController?.popViewController(animated: true)
         print("Filter")
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "FiltersViewController") as! FiltersViewController
+        vc.viewController = self
+        if let parent = self as? ProductsCategoryViewController{
+            vc.delegate = parent
+        }
         vc.modalPresentationStyle = .overFullScreen
         self.navigationController?.present(vc, animated: true, completion: nil)
     }
@@ -467,4 +471,5 @@ extension UIViewController{
 
 extension Notification.Name{
     static let expiredToken = Notification.Name(rawValue: "expiredToken")
+    static let updateCartValue = Notification.Name(rawValue: "updateCartValue")
 }

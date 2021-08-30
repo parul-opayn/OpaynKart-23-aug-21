@@ -33,6 +33,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             window.rootViewController = vc
             self.window = window
             window.makeKeyAndVisible()
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                NotificationCenter.default.post(name: .updateCartValue, object: nil)
+            }
         }
     }
 

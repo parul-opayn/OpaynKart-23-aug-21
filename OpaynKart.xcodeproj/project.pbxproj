@@ -115,6 +115,10 @@
 		33BC74A626CD07CF0088315D /* ContactUsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BC74A526CD07CF0088315D /* ContactUsTableViewCell.swift */; };
 		33BC74A826CD090C0088315D /* FAQViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BC74A726CD090C0088315D /* FAQViewController.swift */; };
 		33BC74AA26CD1A810088315D /* FiltersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BC74A926CD1A810088315D /* FiltersViewController.swift */; };
+		33F10EF626DC973C0028A4C2 /* MyOrdersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F10EF526DC973C0028A4C2 /* MyOrdersViewModel.swift */; };
+		33F10EF826DC99AB0028A4C2 /* MyOrdersDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F10EF726DC99AB0028A4C2 /* MyOrdersDataModel.swift */; };
+		33F10EFB26DCA4230028A4C2 /* Singleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F10EFA26DCA4230028A4C2 /* Singleton.swift */; };
+		33F10EFD26DCABE40028A4C2 /* SubOrderDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33F10EFC26DCABE40028A4C2 /* SubOrderDetailsViewController.swift */; };
 		538844CF5ED52071698346E1 /* Pods_OpaynKartTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCD7E929C748558008CD4DF2 /* Pods_OpaynKartTests.framework */; };
 		677AAE290C2BC3189FD147AF /* Pods_OpaynKart_OpaynKartUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D68CADBF3E68F01D34250703 /* Pods_OpaynKart_OpaynKartUITests.framework */; };
 		8F7795ADAE830FC36FE3BF7C /* Pods_OpaynKart.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 208EE919DEA2066BB43A3D57 /* Pods_OpaynKart.framework */; };
@@ -256,6 +260,10 @@
 		33BC74A526CD07CF0088315D /* ContactUsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactUsTableViewCell.swift; sourceTree = "<group>"; };
 		33BC74A726CD090C0088315D /* FAQViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQViewController.swift; sourceTree = "<group>"; };
 		33BC74A926CD1A810088315D /* FiltersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiltersViewController.swift; sourceTree = "<group>"; };
+		33F10EF526DC973C0028A4C2 /* MyOrdersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyOrdersViewModel.swift; sourceTree = "<group>"; };
+		33F10EF726DC99AB0028A4C2 /* MyOrdersDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyOrdersDataModel.swift; sourceTree = "<group>"; };
+		33F10EFA26DCA4230028A4C2 /* Singleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Singleton.swift; sourceTree = "<group>"; };
+		33F10EFC26DCABE40028A4C2 /* SubOrderDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubOrderDetailsViewController.swift; sourceTree = "<group>"; };
 		47F64AD07851B6B067950DCB /* Pods-OpaynKart-OpaynKartUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OpaynKart-OpaynKartUITests.release.xcconfig"; path = "Target Support Files/Pods-OpaynKart-OpaynKartUITests/Pods-OpaynKart-OpaynKartUITests.release.xcconfig"; sourceTree = "<group>"; };
 		8444296ECB0ABA1A6BEBD073 /* Pods-OpaynKart.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OpaynKart.release.xcconfig"; path = "Target Support Files/Pods-OpaynKart/Pods-OpaynKart.release.xcconfig"; sourceTree = "<group>"; };
 		B56CC1C399FF40C9F3E17466 /* Pods-OpaynKart-OpaynKartUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OpaynKart-OpaynKartUITests.debug.xcconfig"; path = "Target Support Files/Pods-OpaynKart-OpaynKartUITests/Pods-OpaynKart-OpaynKartUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -353,6 +361,7 @@
 				336B9F3126D76444007CCB12 /* WishlistViewmodel.swift */,
 				336B9F3A26D7A422007CCB12 /* CartViewModel3.swift */,
 				338F912926D89ED2009C6059 /* AddAddressViewModel.swift */,
+				33F10EF526DC973C0028A4C2 /* MyOrdersViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -373,6 +382,7 @@
 				336B9F3C26D7A506007CCB12 /* CartListDataModel.swift */,
 				336DB27526D8CDDA008EB529 /* PlacesDataModel.swift */,
 				336DB27726D8E4A2008EB529 /* AddressListModel.swift */,
+				33F10EF726DC99AB0028A4C2 /* MyOrdersDataModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -480,6 +490,7 @@
 		33A6287526CA3FA6005E6FFD /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				33F10EF926DCA4120028A4C2 /* Singleton */,
 				336B9F3726D769E7007CCB12 /* TableCollection Errors */,
 				336F32F026D60DE2000363B6 /* Project Enums */,
 				33918D0126D3A7A200DDF816 /* ImagePicker */,
@@ -549,6 +560,7 @@
 				33BC74A926CD1A810088315D /* FiltersViewController.swift */,
 				337E1D0B26CFBDB400B6E1C1 /* SearchViewViewController.swift */,
 				336F32F726D617BB000363B6 /* ResetPasswordViewController.swift */,
+				33F10EFC26DCABE40028A4C2 /* SubOrderDetailsViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -597,6 +609,14 @@
 				33A628BE26CA7D41005E6FFD /* ProductHeaderView.swift */,
 			);
 			path = Xibs;
+			sourceTree = "<group>";
+		};
+		33F10EF926DCA4120028A4C2 /* Singleton */ = {
+			isa = PBXGroup;
+			children = (
+				33F10EFA26DCA4230028A4C2 /* Singleton.swift */,
+			);
+			path = Singleton;
 			sourceTree = "<group>";
 		};
 		623C67867859C7AA876E4BF3 /* Pods */ = {
@@ -889,6 +909,7 @@
 				33A628C126CA8CDF005E6FFD /* MainTabBarViewController.swift in Sources */,
 				3362212226CBB49800C670E8 /* wishlistViewController.swift in Sources */,
 				3362212626CBBF0200C670E8 /* AddAdressViewController.swift in Sources */,
+				33F10EF826DC99AB0028A4C2 /* MyOrdersDataModel.swift in Sources */,
 				33918D0726D3B59500DDF816 /* LoginModel.swift in Sources */,
 				337E1D0A26CF788000B6E1C1 /* CollectionViewHeightAdjuster.swift in Sources */,
 				33918CF726D3811D00DDF816 /* Indicator.swift in Sources */,
@@ -902,8 +923,10 @@
 				336F32FA26D618AA000363B6 /* ForgotPasswordViewModel.swift in Sources */,
 				33918CFB26D396FE00DDF816 /* LoginViewModel.swift in Sources */,
 				3362212A26CBC1BA00C670E8 /* AddressTableViewCell.swift in Sources */,
+				33F10EF626DC973C0028A4C2 /* MyOrdersViewModel.swift in Sources */,
 				336F32FE26D65E8E000363B6 /* ProductsDataModel.swift in Sources */,
 				33A6284626CA3842005E6FFD /* AppDelegate.swift in Sources */,
+				33F10EFB26DCA4230028A4C2 /* Singleton.swift in Sources */,
 				336F32ED26D60B8E000363B6 /* GeneralContentViewModel.swift in Sources */,
 				336DB27826D8E4A2008EB529 /* AddressListModel.swift in Sources */,
 				33918CF126D37CAE00DDF816 /* Alert.swift in Sources */,
@@ -923,6 +946,7 @@
 				336B9F3626D76524007CCB12 /* WishlistDataModel.swift in Sources */,
 				33A628AD26CA5E16005E6FFD /* SetImage.swift in Sources */,
 				3362213026CBD10100C670E8 /* ForgotPasswordViewController.swift in Sources */,
+				33F10EFD26DCABE40028A4C2 /* SubOrderDetailsViewController.swift in Sources */,
 				33A6284826CA3842005E6FFD /* SceneDelegate.swift in Sources */,
 				3362212026CBB02700C670E8 /* CartTableViewCell.swift in Sources */,
 				33A628AA26CA5E16005E6FFD /* SetView.swift in Sources */,

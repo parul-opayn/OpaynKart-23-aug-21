@@ -37,6 +37,8 @@ enum APISuffix {
     case userAddressList
     case deleteAddress(String)
     case placeOrder
+    case myOrders
+    case filters
     
     func getDescription() -> String {
         
@@ -129,6 +131,12 @@ enum APISuffix {
             
         case .placeOrder:
             return "api/v1/place-order"
+            
+        case .myOrders:
+            return "api/v1/orders"
+            
+        case .filters:
+            return "filters"
         }
        
     }
@@ -146,7 +154,7 @@ enum URLS {
         switch self {
             
         case .baseUrl :
-            return "http://ebde-180-188-237-46.ngrok.io/"
+            return "http://1d4a-180-188-237-46.ngrok.io/"
             
         case .googlePlaces:
             return "https://maps.googleapis.com/maps/api/place/autocomplete/json?key="

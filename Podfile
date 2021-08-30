@@ -16,6 +16,8 @@ target 'OpaynKart' do
   pod 'TOCropViewController'
   pod 'SDWebImage'
   pod 'SkeletonView','1.5.0'
+  pod 'RangeSeekSlider'
+
   #pod 'GooglePlaces'
   
   target 'OpaynKartTests' do

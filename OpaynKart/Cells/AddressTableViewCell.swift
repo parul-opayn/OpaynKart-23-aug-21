@@ -19,7 +19,6 @@ class AddressTableViewCell: UITableViewCell {
     @IBOutlet weak var userMobileLbl3: UILabel!
     @IBOutlet weak var selectionImage: UIImageView!
     
-    
     override func awakeFromNib() {
         super.awakeFromNib()
     }

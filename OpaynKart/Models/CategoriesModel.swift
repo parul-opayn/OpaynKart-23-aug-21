@@ -12,11 +12,13 @@ struct Category: Codable {
     let id, parent, name: String?
     let image, updatedAt: String?
     let createdAt: String?
+    let subCategories: [Category]?
 
     enum CodingKeys: String, CodingKey {
         case id, parent, name, image
         case updatedAt = "updated_at"
         case createdAt = "created_at"
+        case subCategories
     }
 }
 

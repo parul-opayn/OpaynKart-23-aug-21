@@ -76,28 +76,37 @@ class AddressViewController: UIViewController {
     }
     
     @IBAction func tappedproceedBtn(_ sender: UIButton) {
-        Indicator.shared.showProgressView(self.view)
-        self.dictToSend = [:]
-        var products = [[String:Any]]()
-        for i in self.cartViewModel.cartList?.data ?? []{
-            products.append(["product_id":i.id ?? "","quantity":i.quantity ?? ""])
-        }
-//        self.dictToSend["products"] = products
-//        self.dictToSend["address_id"] = self.selectedAddress
-//        self.dictToSend["tax"] = self.cartViewModel.cartList?.settings?.tax ?? ""
-//        self.dictToSend["shipping"]  = self.cartViewModel.cartList?.settings?.deliveryFee ?? ""
-//        print(dictToSend)
-        cartViewModel.checkOut(products: products, addressId: self.selectedAddress, tax: self.cartViewModel.cartList?.settings?.tax ?? "", shipping: self.cartViewModel.cartList?.settings?.deliveryFee ?? "") {[weak self] isSuccess, message in
-            Indicator.shared.hideProgressView()
-            
-            guard let self = self else{return}
-            if isSuccess{
-                print("API Success")
+      
+        if self.selectedAddress != ""{
+            Indicator.shared.showProgressView(self.view)
+            self.dictToSend = [:]
+            var products = [[String:Any]]()
+            for i in self.cartViewModel.cartList?.data ?? []{
+                products.append(["product_id":i.id ?? "","quantity":i.quantity ?? ""])
             }
-            else{
-                print("API Failure")
+            cartViewModel.checkOut(products: products, addressId: self.selectedAddress, tax: self.cartViewModel.cartList?.settings?.tax ?? "", shipping: self.cartViewModel.cartList?.settings?.deliveryFee ?? "") {[weak self] isSuccess, message in
+                Indicator.shared.hideProgressView()
+                
+                guard let self = self else{return}
+                if isSuccess{
+                    self.navigationController?.popToRootViewController(animated: true)
+                    self.tabBarController?.selectedIndex = 3
+                    let vc = self.storyboard?.instantiateViewController(identifier: "MyOrdersViewController") as! MyOrdersViewController
+                    if let navigation = self.tabBarController?.viewControllers?.last as? UINavigationController{
+                        navigation.pushViewController(vc, animated: true)
+                    }
+                    
+                    print("API Success")
+                }
+                else{
+                    print("API Failure")
+                }
             }
         }
+        else{
+            self.showToast(message: "Please select an address")
+        }
+
     }
     
 }
