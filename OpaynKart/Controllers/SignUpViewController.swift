@@ -10,6 +10,7 @@ import UIKit
 class SignUpViewController: UIViewController {
     
     //MARK:- IBOutlets
+    
     @IBOutlet weak var registerHeadingLabel: UILabel!
     @IBOutlet weak var fillFormLbl: UILabel!
     @IBOutlet weak var fullNameLbl: UILabel!
@@ -26,6 +27,8 @@ class SignUpViewController: UIViewController {
     @IBOutlet weak var fieldStackView: UIStackView!
     
     //MARK:- Variables
+    
+    var viewModel = SignupViewModel()
         
     //MARK:- Life Cycle Methods
     
@@ -65,7 +68,34 @@ class SignUpViewController: UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
     
-    
-    //MARK:- Extensions
-    
+    @IBAction func tappedRegisterBtn(_ sender: UIButton) {
+        let validation = viewModel.validation(name: fullNameTxtFld.text ?? "", email: emailTxtFld.text ?? "", password: createPasswordTxtFld.text ?? "", repeatPassword: repeatTxtFld.text ?? "")
+        if validation.0{
+            signupAPI()
+        }
+        else{
+            //self.showAlert(Title: "OpaynKart", Message: validation.1, ButtonTitle: "OK")
+            self.showToast(message: validation.1)
+        }
+    }
+}
+
+//MARK:- API calls
+
+extension SignUpViewController{
+    func signupAPI(){
+        Indicator.shared.showProgressView(self.view)
+        viewModel.signupAPI(name: fullNameTxtFld.text ?? "", email: emailTxtFld.text ?? "", password: createPasswordTxtFld.text ?? "") { isSuccess, message in
+            Indicator.shared.hideProgressView()
+            if isSuccess{
+               // self.showAlertWithAction(Title: "OpaynKart", Message: "Signup Successful", ButtonTitle: "OK") {
+                self.showToast(message: "Signup Successful")
+                    self.navigationController?.popViewController(animated: true)
+               // }
+            }
+            else{
+                self.showToast(message: message)
+            }
+        }
+    }
 }

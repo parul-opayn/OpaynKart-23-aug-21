@@ -21,11 +21,16 @@ class ProductDetailsViewController: UIViewController {
     @IBOutlet weak var reviewsBtnView: UIView!
     @IBOutlet weak var reviewTableHeight: NSLayoutConstraint!
     @IBOutlet weak var addToCartBtn: SetButton!
+    @IBOutlet weak var productNameLbl: UILabel!
+    @IBOutlet weak var productPriceLbl: UILabel!
+    @IBOutlet weak var wishBtn: UIButton!
+    @IBOutlet weak var pageControl: UIPageControl!
     
     //MARK:- Variables
     
     var userSelectedIndex = -1
-    
+    var viewModel = ProductDetailsViewModel()
+    var id = ""
     //MARK:- Life Cycle Methods
     
     override func viewDidLoad() {
@@ -42,6 +47,7 @@ class ProductDetailsViewController: UIViewController {
         delegateAndDataSources()
         self.navigationWithCart()
         fontsAdjustment()
+        productDetailsAPI()
     }
     
     //MARK:- Custom Methods
@@ -90,6 +96,41 @@ class ProductDetailsViewController: UIViewController {
         self.updateTableHeight(tableName: reviewsTableView, tableHeight: reviewTableHeight)
     }
     
+    @IBAction func tappedWishlistBtn(_ sender: UIButton) {
+        
+        if UserDefaults.standard.value(forKey: "token") != nil{
+          
+            let wishStatus = self.viewModel.detailsModel?.wishlist_status
+            if self.viewModel.detailsModel != nil{
+                if !(wishStatus ?? false){
+                    self.viewModel.detailsModel?.wishlist_status = true
+                    wishlistAPI(productId: self.id, status: "")
+                    self.wishBtn.setImage(#imageLiteral(resourceName: "heart"), for: .normal)
+                }
+                else{
+                    self.viewModel.detailsModel?.wishlist_status = false
+                    self.wishBtn.setImage(#imageLiteral(resourceName: "emptyWishlist"), for: .normal)
+                    wishlistAPI(productId: self.id, status: "")
+                }
+            }
+            else{
+                self.wishBtn.setImage(#imageLiteral(resourceName: "emptyWishlist"), for: .normal)
+            }
+        }
+        else{
+            self.showAlert(Title: "OPayn Kart", Message: "Login required.", ButtonTitle: "Ok")
+        }
+    }
+    
+    @IBAction func tappedAddToCart(_ sender: UIButton) {
+        
+        if UserDefaults.standard.value(forKey: "token") != nil{
+          addProductToCart()
+        }
+        else{
+            self.showAlert(Title: "OPayn Kart", Message: "Login required.", ButtonTitle: "Ok")
+        }
+    }
 }
 
 //MARK:- TableView Delegates
@@ -117,7 +158,7 @@ extension ProductDetailsViewController:UICollectionViewDelegate,UICollectionView
             return 10
         }
         else{
-            return 10
+            return viewModel.detailsModel?.images?.count ?? 0
         }
     }
     
@@ -136,6 +177,7 @@ extension ProductDetailsViewController:UICollectionViewDelegate,UICollectionView
         }
         else{
             let cell = self.productDetailsCollection.dequeueReusableCell(withReuseIdentifier: "ProductDetailsCollectionViewCell", for: indexPath) as! ProductDetailsCollectionViewCell
+            cell.productImageView.sd_setImage(with: URL(string: viewModel.detailsModel?.images?[indexPath.row] ?? ""), placeholderImage: #imageLiteral(resourceName: "placeholder Image"), options: .highPriority, context: nil)
             return cell
         }
        
@@ -145,17 +187,18 @@ extension ProductDetailsViewController:UICollectionViewDelegate,UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == productDetailsCollection{
-            return CGSize(width: collectionView.bounds.width, height: collectionView.bounds.height)
+            return CGSize(width: collectionView.bounds.width - 0, height: collectionView.bounds.height)
         }
         else{
-            return CGSize(width: collectionView.bounds.width / 4 - 2, height: collectionView.bounds.height)
+           
+           return CGSize(width: collectionView.bounds.width / 4 - 2, height: collectionView.bounds.height)
         }
         
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         if collectionView == productDetailsCollection{
-            return 2
+            return 0
         }
         else{
             return 2
@@ -165,7 +208,7 @@ extension ProductDetailsViewController:UICollectionViewDelegate,UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         if collectionView == productDetailsCollection{
-            return 2
+            return 0
         }
         else{
             return 2
@@ -180,5 +223,89 @@ extension ProductDetailsViewController:UICollectionViewDelegate,UICollectionView
        
     }
     
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        
+        if  let collectionView = scrollView as? UICollectionView{
+            if collectionView == self.productDetailsCollection{
+                let x = scrollView.contentOffset.x
+                let w = scrollView.bounds.size.width
+                let currentPage = Int(ceil(x/w))
+                print("collection view current page = \(currentPage)")
+                self.pageControl.currentPage = currentPage
+            }
+        }
+       
+       
+    }
+    
 }
 
+//MARK:- API Calls
+
+extension ProductDetailsViewController{
+    
+    func productDetailsAPI(){
+        Indicator.shared.showProgressView(self.view)
+        self.viewModel.productDetails(productId: self.id){ isSuccess, message in
+            Indicator.shared.hideProgressView()
+            if isSuccess{
+                self.productDetailsCollection.reloadData()
+                if self.viewModel.detailsModel?.wishlist_status ?? false{
+                    self.wishBtn.setImage(#imageLiteral(resourceName: "heart"), for: .normal)
+                }
+                else{
+                    self.wishBtn.setImage(#imageLiteral(resourceName: "emptyWishlist"), for: .normal)
+                }
+                self.pageControl.numberOfPages = self.viewModel.detailsModel?.images?.count ?? 0
+                self.productNameLbl.text = self.viewModel.detailsModel?.name ?? ""
+                self.productPriceLbl.text = "$" + (self.viewModel.detailsModel?.salePrice ?? "")
+                self.DetailsLabel.text = self.viewModel.detailsModel?.productDetailsModelDescription ?? ""
+            }
+            else{
+                self.pageControl.numberOfPages = self.viewModel.detailsModel?.images?.count ?? 0
+                self.showToast(message: message)
+            }
+        }
+    }
+    
+    func wishlistAPI(productId:String,status:String){
+        
+        self.viewModel.wishlistItem(user_id:UserDefault.sharedInstance?.getUserDetails()?.id ?? "",product_id: productId,status: status){ isSuccess, message in
+            if isSuccess{
+                print("wishlist updated")
+            }
+            else{
+                let wishStatus = self.viewModel.detailsModel?.wishlist_status
+                if self.viewModel.detailsModel != nil{
+                    if !(wishStatus ?? false){
+                        self.viewModel.detailsModel?.wishlist_status = true
+                        self.wishBtn.setImage(#imageLiteral(resourceName: "heart"), for: .normal)
+                    }
+                    else{
+                        self.viewModel.detailsModel?.wishlist_status = false
+                        self.wishBtn.setImage(#imageLiteral(resourceName: "emptyWishlist"), for: .normal)
+                    }
+                }
+                else{
+                    self.wishBtn.setImage(#imageLiteral(resourceName: "emptyWishlist"), for: .normal)
+                }
+                self.showToast(message: message)
+            }
+        }
+    }
+    
+    
+    func addProductToCart(){
+        Indicator.shared.showProgressView(self.view)
+        self.viewModel.addToCart(productId: self.id,quantity:1){ isSuccess, message in
+            Indicator.shared.hideProgressView()
+            if isSuccess{
+                self.showToast(message: "Product added to cart.")
+            }
+            else{
+                self.showToast(message: message)
+            }
+        }
+    }
+
+}

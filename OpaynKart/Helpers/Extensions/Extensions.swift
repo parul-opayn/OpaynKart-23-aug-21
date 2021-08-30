@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import SideMenu
+import CoreLocation
 
 extension UIViewController{
     
@@ -258,6 +259,11 @@ extension UIViewController{
         view.window!.layer.add(transition, forKey: kCATransition)
         dismiss(animated: false, completion: nil)
     }
+    
+    func generateUniqueName(withSuffix suffix:String)->String{
+        let uuid = UUID().uuidString
+        return "OpaynKart-\(uuid)\(suffix)"
+    }
 }
 
 
@@ -404,4 +410,61 @@ extension UITableViewCell{
             }
         }
     }
+    
+    
+}
+
+
+//MARK:- Reverse GeoCode
+
+extension UIViewController{
+    
+    func getAddress(lat:Double,long:Double,completion:@escaping(ReverseGeoCode?)->()) {
+        
+        var address: ReverseGeoCode?
+        
+        var center : CLLocationCoordinate2D = CLLocationCoordinate2D()
+        
+        let ceo: CLGeocoder = CLGeocoder()
+        center.latitude = lat
+        center.longitude = long
+        
+        let loc: CLLocation = CLLocation(latitude:center.latitude, longitude: center.longitude)
+        
+        ceo.reverseGeocodeLocation(loc, completionHandler:
+                                    {(placemarks, error) in
+                                        if (error != nil)
+                                        {
+                                            print("reverse geodcode fail: \(error!.localizedDescription)")
+                                            completion(address)
+                                        }
+                                        let pm = placemarks! as [CLPlacemark]
+                                        
+                                        if pm.count > 0 {
+                                            let pm = placemarks![0]
+                                            print(pm.country as Any)
+                                            address?.country = pm.country
+                                            print(pm.locality as Any)
+                                            address?.locatlity = pm.locality
+                                            print(pm.subLocality as Any)
+                                            address?.subLocality = pm.subLocality
+                                            print(pm.thoroughfare as Any)
+                                            print(pm.postalCode as Any)
+                                            address?.zip = pm.postalCode
+                                            print(pm.subThoroughfare as Any)
+                                            address?.state = pm.administrativeArea
+//
+                                            address = ReverseGeoCode(locationName: pm.name, street: pm.thoroughfare, city: pm.locality, state: pm.administrativeArea, zip: pm.postalCode, country: pm.country, locatlity: pm.locality, subLocality: pm.subLocality)
+//
+//
+                                            completion(address)
+                                        }
+                                    })
+        
+    }
+}
+
+
+extension Notification.Name{
+    static let expiredToken = Notification.Name(rawValue: "expiredToken")
 }

@@ -14,10 +14,10 @@ class FAQViewController: UIViewController {
     @IBOutlet weak var faqTableView: UITableView!
     @IBOutlet weak var searchTextField: SetTextField!
     
-    
     //MARK:- Variables
     
     var userSelectedIndex = -1
+    var viewModel = FAQViewModel()
     
     //MARK:- Life Cycle Methods
     
@@ -28,7 +28,8 @@ class FAQViewController: UIViewController {
         faqTableView.dataSource = self
         self.navigationController?.isNavigationBarHidden = false
         self.navigationWithBack(navtTitle: "FAQ")
-        
+        FAQsAPI()
+        faqTableView.tableFooterView = UIView()
     }
     
     //MARK:- Custom Methods
@@ -51,11 +52,21 @@ class FAQViewController: UIViewController {
         view.addSubview(imageView)
         searchTextField.leftViewMode = .always
         searchTextField.leftView = view
+        searchTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     }
     
     //MARK:- Objc Methods
     
-    
+    @objc func textFieldDidChange(sender:UITextField){
+        if sender.text ?? "" == ""{
+            self.viewModel.faqModel = self.viewModel.temp
+        }
+        else{
+            self.viewModel.faqModel.removeAll()
+            self.viewModel.faqModel = viewModel.temp.filter({($0.question?.lowercased().contains(sender.text?.lowercased() ?? "") ?? false) || ($0.answer?.lowercased().contains(sender.text?.lowercased() ?? "") ?? false)})
+        }
+        self.faqTableView.reloadData()
+    }
     
     //MARK:- IBActions
     
@@ -68,7 +79,7 @@ class FAQViewController: UIViewController {
 extension FAQViewController:UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return viewModel.faqModel.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -83,6 +94,8 @@ extension FAQViewController:UITableViewDelegate,UITableViewDataSource{
             cell.answerLabel.numberOfLines = 1
             cell.arrowImage.image = #imageLiteral(resourceName: "up")
         }
+        cell.questionLabel.text = viewModel.faqModel[indexPath.row].question ?? ""
+        cell.answerLabel.text = viewModel.faqModel[indexPath.row].answer ?? ""
         return cell
     }
     
@@ -109,4 +122,19 @@ extension FAQViewController:UITextFieldDelegate{
         return true
     }
     
+}
+
+
+//MARK:- API Calls
+
+extension FAQViewController{
+    func FAQsAPI(){
+        
+        Indicator.shared.showProgressView(self.view)
+        viewModel.FAQsAPI() {[weak self] isSuccess, message in
+            Indicator.shared.hideProgressView()
+            guard let self = self else{return}
+            self.faqTableView.reloadData()
+        }
+    }
 }

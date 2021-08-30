@@ -1,38 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Bucket
-   uuid = "3DB77177-55AE-45DC-AEFA-5ECCA3170034"
+   uuid = "338C63E2-043B-4FF5-98FA-057FF154CBE6"
    type = "0"
    version = "2.0">
    <Breakpoints>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "2DEA353E-021C-4D51-8D51-AFBC4CB3383B"
+            uuid = "EDE73B28-F240-4386-924A-622ED66A2B98"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "OpaynKart/Helpers/CollectionViewHeightAdjuster.swift"
+            filePath = "OpaynKart/Controllers/AddAdressViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "11"
-            endingLineNumber = "11"
-            landmarkName = "layoutSubviews()"
+            startingLineNumber = "274"
+            endingLineNumber = "274"
+            landmarkName = "AddAdressViewController"
+            landmarkType = "21">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "D10AA764-FB1C-49D1-A1F0-7A8D5BA7373D"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "OpaynKart/Controllers/AddAdressViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "138"
+            endingLineNumber = "138"
+            landmarkName = "locateWithCoordinates()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "9FF2FA2A-9A25-4928-99A8-DA29EA87B6F2"
+            uuid = "D6580BFF-CEE7-4ECC-B9D3-5D05DBC31CB7"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "OpaynKart/Controllers/AboutUsViewController.swift"
+            filePath = "OpaynKart/Controllers/ProductsCategoryViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "15"
-            endingLineNumber = "15"
-            landmarkName = "viewDidLoad()"
+            startingLineNumber = "340"
+            endingLineNumber = "340"
+            landmarkName = "categoryWiseproductsAPI(categoryId:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "5A4C8482-4464-4585-ACF7-834D94CA107C"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "OpaynKart/ViewModels/ProductsCategoryViewModel.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "161"
+            endingLineNumber = "161"
+            landmarkName = "categoryWiseProducts(categoryId:completion:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

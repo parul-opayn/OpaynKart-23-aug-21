@@ -62,6 +62,7 @@ extension CategoryTableViewCell:UICollectionViewDelegate,UICollectionViewDataSou
             cell.productPPriceLbl.changeFontSize()
             cell.isLayoutDone = true
         }
+        
         return cell
     }
     

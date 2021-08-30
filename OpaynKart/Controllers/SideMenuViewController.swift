@@ -21,6 +21,7 @@ class SideMenuViewController: UIViewController {
     //MARK:- Variables
     
     var data = ["Shop by Categories","Contact Us","About us","Privacy Policy","Terms and Conditions","FAQ"]
+    var imagesArray = [UIImage(named: "shop"),UIImage(named: "contactUs"),UIImage(named: "AboutUs"),UIImage(named: "privacyPolicy"),UIImage(named: "Terms"),UIImage(named: "FAQ")]
     var viewController = UIViewController()
     
     //MARK:- Life Cycle Methods
@@ -32,6 +33,7 @@ class SideMenuViewController: UIViewController {
         self.tableView.tableFooterView = UIView()
         self.navigationController?.isNavigationBarHidden = true
         changeFontSizes()
+        displayUserData()
     }
     
     //MARK:- Custom Methods
@@ -45,6 +47,12 @@ class SideMenuViewController: UIViewController {
             self.userImageHeight.constant = 120
             self.userImageWidth.constant = 120
         }
+    }
+    
+    func displayUserData(){
+        self.userImageView.sd_setImage(with: URL(string: URLS.baseUrl.getDescription() + (UserDefault.sharedInstance?.getUserDetails()?.image ?? "")), placeholderImage: #imageLiteral(resourceName: "profilePlaceholder"), options: .highPriority, context: nil)
+        self.userNameLbl.text = UserDefault.sharedInstance?.getUserDetails()?.name ?? "Guest User"
+        self.userEmailLbl.text = UserDefault.sharedInstance?.getUserDetails()?.email ?? "N/A"
     }
     
     //MARK:- IBActions
@@ -67,7 +75,7 @@ extension SideMenuViewController:UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.tableView.dequeueReusableCell(withIdentifier: "AddressTableViewCell") as! AddressTableViewCell
         cell.menuItemLabel.text = data[indexPath.row]
-        //cell.menuImage.changeLayout()
+        cell.menuImage.image = imagesArray[indexPath.row]
         cell.menuItemLabel.changeFontSize()
        // cell.menuImage.changeLayout()
         return cell
@@ -78,29 +86,52 @@ extension SideMenuViewController:UITableViewDelegate,UITableViewDataSource{
         case 0:
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "ShopByCategoriesViewController") as! ShopByCategoriesViewController
             vc.hidesBottomBarWhenPushed = true
-            self.viewController.navigationController?.pushViewController(vc, animated: true)
-            self.dismiss(animated: true, completion: nil)
+            if let parentCont = viewController as? ProductsCategoryViewController{
+                vc.homeViewModel = parentCont.viewModel
+                self.viewController.navigationController?.pushViewController(vc, animated: true)
+                self.dismiss(animated: true, completion: nil)
+            }
+            else{
+                self.showToast(message: "Option not available")
+            }
+           
             break
         case 1:
-            let vc = self.storyboard?.instantiateViewController(withIdentifier: "ContactUsViewController") as! ContactUsViewController
-            vc.hidesBottomBarWhenPushed = true
-            self.viewController.navigationController?.pushViewController(vc, animated: true)
-            self.dismiss(animated: true, completion: nil)
+            
+            var vc = UIViewController()
+            if UserDefaults.standard.value(forKey: "userData") != nil{
+                vc = self.storyboard?.instantiateViewController(withIdentifier: "ContactUsViewController") as! ContactUsViewController
+                vc.hidesBottomBarWhenPushed = true
+                self.viewController.navigationController?.pushViewController(vc, animated: true)
+                self.dismiss(animated: true, completion: nil)
+            }
+            else{
+                self.showAlertWithAction(Title: "Opayn Kart", Message: "Please login to continue", ButtonTitle: "OK") {
+                    vc = self.storyboard?.instantiateViewController(withIdentifier: "LoginViewController") as! LoginViewController
+                    vc.hidesBottomBarWhenPushed = true
+                    self.viewController.navigationController?.pushViewController(vc, animated: true)
+                    self.dismiss(animated: true, completion: nil)
+                }
+            }
+            
             break
         case 2:
             let vc = self.storyboard?.instantiateViewController(withIdentifier: "AboutUsViewController") as! AboutUsViewController
+            vc.generalDatatype = .aboutUs
             vc.hidesBottomBarWhenPushed = true
             self.viewController.navigationController?.pushViewController(vc, animated: true)
             self.dismiss(animated: true, completion: nil)
             break
         case 3:
-            let vc = self.storyboard?.instantiateViewController(withIdentifier: "PrivacyPolicyViewController") as! PrivacyPolicyViewController
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: "AboutUsViewController") as! AboutUsViewController
+            vc.generalDatatype = .privacyPolicy
             vc.hidesBottomBarWhenPushed = true
             self.viewController.navigationController?.pushViewController(vc, animated: true)
             self.dismiss(animated: true, completion: nil)
             break
         case 4:
-            let vc = self.storyboard?.instantiateViewController(withIdentifier: "TermsConditionsViewController") as! TermsConditionsViewController
+            let vc = self.storyboard?.instantiateViewController(withIdentifier: "AboutUsViewController") as! AboutUsViewController
+                vc.generalDatatype = .terms
             vc.hidesBottomBarWhenPushed = true
             self.viewController.navigationController?.pushViewController(vc, animated: true)
             self.dismiss(animated: true, completion: nil)

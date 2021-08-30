@@ -7,6 +7,7 @@
 
 import UIKit
 import IQKeyboardManagerSwift
+//import GooglePlaces
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,18 +15,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        
-        let initialViewController = storyboard.instantiateViewController(withIdentifier: "WalkThroughViewController") as! WalkThroughViewController
-        
-        let navController = UINavigationController(rootViewController: initialViewController)
-        
-        self.window?.rootViewController = navController
-        self.window?.makeKeyAndVisible()
-        
         IQKeyboardManager.shared.enable = true
     
         if UIDevice.current.userInterfaceIdiom == .pad{
@@ -48,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             UITextView.appearance().font = UIFont(name: textViewFont?.fontName ?? "Poppins-Regular", size: (textViewFont?.pointSize ?? 17) + 10)
             
         }
-        
+       // GMSPlacesClient.provideAPIKey("AIzaSyA31rDpXXvW9AJyv31PNnBkNTNxnrM-nXo")
         return true
         
     }

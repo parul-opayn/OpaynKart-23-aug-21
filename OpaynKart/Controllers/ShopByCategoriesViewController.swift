@@ -15,6 +15,8 @@ class ShopByCategoriesViewController: UIViewController {
     
     //MARK:- Variables
     
+    var homeViewModel = ProductsCategoryViewModel()
+    
     //MARK:- Life Cycle Methods
     
     override func viewDidLoad() {
@@ -38,7 +40,7 @@ class ShopByCategoriesViewController: UIViewController {
 extension ShopByCategoriesViewController:UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return homeViewModel.home?.categories?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -55,6 +57,9 @@ extension ShopByCategoriesViewController:UITableViewDelegate,UITableViewDataSour
                 cell.categoryImageHeight.constant = 150
             }
         }
+        cell.titleLbl.text = homeViewModel.home?.categories?[indexPath.row].name ?? ""
+       // cell.descriptonLbl.text = homeViewModel.home?.categories?[indexPath.row].parent ?? ""
+        cell.categoryImage.sd_setImage(with: URL(string: URLS.baseUrl.getDescription() + (homeViewModel.home?.categories?[indexPath.row].image ?? "")), placeholderImage: #imageLiteral(resourceName: "placeholder Image"), options: .highPriority, context: nil)
         return cell
     }
     

@@ -8,9 +8,9 @@
 import UIKit
 
 class LoginViewController: UIViewController {
-
     
     //MARK:- IBOutlets
+    
     @IBOutlet weak var singinHeadingLabel: UILabel!
     @IBOutlet weak var welcomeLbl: UILabel!
     @IBOutlet weak var emailLbl: UILabel!
@@ -23,8 +23,9 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var registerBtn: UIButton!
     @IBOutlet weak var spacingBetweenFields: NSLayoutConstraint!
     
-    
     //MARK:- Variables
+    
+    var viewModel = LoginViewModel()
     
     //MARK:- Life Cycles
     
@@ -71,17 +72,48 @@ class LoginViewController: UIViewController {
     
     
     @IBAction func tappedLoginBtn(_ sender: UIButton) {
-        let vc = self.storyboard?.instantiateViewController(withIdentifier: "MainTabBarViewController") as! MainTabBarViewController
-        self.navigationController?.pushViewController(vc, animated: true)
+        
+        let validation = viewModel.validation(email: emailTxtFld.text ?? "", password: passwordTxtFld.text ?? "")
+        if validation.0{
+            loginAPI()
+        }
+        else{
+            self.showToast(message: validation.1)
+        }
+       
     }
     
     @IBAction func tappedForgotPassword(_ sender: UIButton) {
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "ForgotPasswordViewController") as! ForgotPasswordViewController
         self.navigationController?.pushViewController(vc, animated: true)
     }
+        
+    @IBAction func tappedSkipBtn(_ sender: UIButton) {
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "MainTabBarViewController") as! MainTabBarViewController
+        UserDefaults.standard.removeObject(forKey: "userData")
+        UserDefaults.standard.removeObject(forKey: "token")
+        UserDefault.sharedInstance?.updateUserData()
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
     
-    //MARK:- Extensions
+}
+
+//MARK:- API Calls
+
+extension LoginViewController{
     
+    func loginAPI(){
+        Indicator.shared.showProgressView(self.view)
+        viewModel.loginAPI(email: emailTxtFld.text ?? "", password: passwordTxtFld.text ?? "") { isSuccess, message in
+            Indicator.shared.hideProgressView()
+            if isSuccess{
+                let vc = self.storyboard?.instantiateViewController(withIdentifier: "MainTabBarViewController") as! MainTabBarViewController
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+            else{
+                self.showToast(message: message)
+            }
+        }
+    }
     
- 
 }

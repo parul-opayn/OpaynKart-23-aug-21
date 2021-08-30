@@ -10,11 +10,14 @@ target 'OpaynKart' do
   pod 'IQKeyboardManagerSwift'
   pod 'SideMenu'
   pod 'GrowingTextView'
-  #pod 'iOSDropDown'
   pod 'DropDown'
-
-  # Note it's NOT 'SideMenu'
-
+  pod 'Alamofire'
+  pod 'SnackBar.swift', '0.1.0'
+  pod 'TOCropViewController'
+  pod 'SDWebImage'
+  pod 'SkeletonView','1.5.0'
+  #pod 'GooglePlaces'
+  
   target 'OpaynKartTests' do
     inherit! :search_paths
     # Pods for testing

@@ -4,6 +4,8 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string></string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -16,10 +18,38 @@
 	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
 	<key>CFBundleShortVersionString</key>
 	<string>1.0</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>prefs</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>LSApplicationCategoryType</key>
+	<string></string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSFileProviderDomainUsageDescription</key>
+	<string>Please allow this app to access camera for photos</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Please allow this app to access your current location for address.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Please allow this app to access your current location for address</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Please allow this app to access your photos in order to create profile images.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Please allow this app to access your photos in order to create profile images.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
