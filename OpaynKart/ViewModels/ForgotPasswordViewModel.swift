@@ -11,7 +11,7 @@ class ForgotPasswordViewModel: BaseAPI {
     
     func forgotPasswordAPI(email:String,completion:@escaping(Bool,String)->()){
         
-        let param = ["email":email] as baseParameters
+        let param = ["email":email,"type":"user"] as baseParameters
         
         let request = Request(url: (URLS.baseUrl, APISuffix.forgotPassword), method: .post, parameters: param, headers: false)
         

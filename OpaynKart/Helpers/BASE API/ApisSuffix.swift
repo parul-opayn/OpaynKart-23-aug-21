@@ -13,7 +13,6 @@ enum APISuffix {
     case signUp
     case login
     case updateUser
-    case sliders
     case categories
     case profile
     case home
@@ -43,7 +42,7 @@ enum APISuffix {
     func getDescription() -> String {
         
         switch self {
-            
+        
         case .signUp :
             return "user/create"
             
@@ -52,9 +51,6 @@ enum APISuffix {
             
         case .updateUser:
             return "api/v1/user/update"
-            
-        case .sliders:
-            return "sliders"
             
         case .categories:
             return "categories"
@@ -94,7 +90,6 @@ enum APISuffix {
                 return "product-detail/\(id)"
             }
             
-            
         case .wishlist:
             return "api/v1/wishlist"
             
@@ -103,7 +98,6 @@ enum APISuffix {
             
         case .cartDetails:
             return "api/v1/cart-listing"
-            
             
         case .deleteCart(let value):
             return "api/v1/cart-item/\(value)"
@@ -138,7 +132,7 @@ enum APISuffix {
         case .filters:
             return "filters"
         }
-       
+        
     }
 }
 
@@ -152,9 +146,9 @@ enum URLS {
     func getDescription() -> String {
         
         switch self {
-            
+        
         case .baseUrl :
-            return "http://1d4a-180-188-237-46.ngrok.io/"
+            return "http://6275-180-188-237-46.ngrok.io/"
             
         case .googlePlaces:
             return "https://maps.googleapis.com/maps/api/place/autocomplete/json?key="

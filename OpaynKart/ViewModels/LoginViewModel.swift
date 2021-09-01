@@ -26,7 +26,7 @@ class LoginViewModel: BaseAPI {
     }
     
     func loginAPI(email:String,password:String,completion:@escaping(Bool,String)->()){
-        let param = ["email":email,"password":password] as baseParameters
+        let param = ["email":email,"password":password,"type":"user"] as baseParameters
         let request = Request(url: (URLS.baseUrl, APISuffix.login), method: .post, parameters: param, headers: true)
         super.hitApi(requests: request) { receivedData, message, responseCode in
             if responseCode == 1{

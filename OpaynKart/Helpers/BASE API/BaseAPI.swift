@@ -355,7 +355,13 @@ func hitApiWithMultipleFile(requests : RequestFilesData , completion : @escaping
                     
                 case 400...412:
                     print("🤬 🤬 🤬 🤬 🤬 FAILED 🤬 🤬 🤬 🤬 🤬 ")
-                    clouser(json, response.description ,2)
+                    do{
+                        clouser(json, ((try response.result.get() as? [String:Any])?["message"] as? String) ?? response.description ,2)
+                    }
+                    catch{
+                        clouser(json, response.description ,2)
+                    }
+                   
                     
                 case 500...599:
                     clouser(json , "Database Error." , 2)

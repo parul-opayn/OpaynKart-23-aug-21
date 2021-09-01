@@ -12,7 +12,7 @@ class SignupViewModel: BaseAPI {
     //MARK:- API Calls
     
     func signupAPI(name:String,email:String,password:String,completion:@escaping(Bool,String)->()){
-        let param = ["name":name,"email":email,"password":password] as baseParameters
+        let param = ["name":name,"email":email,"password":password,"type":"user"] as baseParameters
         let request = Request(url: (URLS.baseUrl, APISuffix.signUp), method: .post, parameters: param, headers: true)
         super.hitApi(requests: request) { receivedData, message, responseCode in
             if responseCode == 1{
