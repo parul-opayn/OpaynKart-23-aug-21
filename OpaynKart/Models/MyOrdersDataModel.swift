@@ -26,6 +26,7 @@ struct ProductsData: Codable {
     let id, name, quantity: String?
     let images: [String]?
     let price:String?
+    let status:String?
 }
 
 typealias MyOrderDataModel = [MyOrderDataModelElement]

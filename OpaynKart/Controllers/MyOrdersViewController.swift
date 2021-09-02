@@ -12,7 +12,7 @@ class MyOrdersViewController: UIViewController {
     //MARK:- IBOutlets
     
     @IBOutlet weak var ordersTableView: UITableView!
-    @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var searchTxtFld: UITextField!
     @IBOutlet weak var filtersBtn: UIButton!
     
     //MARK:- Variables
@@ -26,11 +26,10 @@ class MyOrdersViewController: UIViewController {
         ordersTableView.delegate = self
         ordersTableView.dataSource = self
         self.navigationWithBack(navtTitle: "My Orders")
-        searchBar.isTranslucent = false
-        searchBar.backgroundImage = UIImage()
         filtersBtn.changeButtonLayout()
         filtersBtn.changeFontSize()
         self.ordersTableView.tableFooterView = UIView()
+        setUpTextField()
     }
     
     
@@ -40,7 +39,47 @@ class MyOrdersViewController: UIViewController {
     
     //MARK:- Custom Methods
     
+    func setUpTextField(){
+        searchTxtFld.placeholder = "Search Here"
+        searchTxtFld.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width - 32, height: 32)
+        searchTxtFld.borderStyle = .none
+        searchTxtFld.returnKeyType = .search
+        searchTxtFld.leftViewMode = .always
+        //searchTxtFld.delegate = self
+        searchTxtFld.backgroundColor = UIColor(named: "AppLightGray")
+        searchTxtFld.layer.cornerRadius = 8
+        let imageView = UIImageView(frame: CGRect(x: 8.0, y: 10, width: 20.0, height: 20.0))
+        let image = #imageLiteral(resourceName: "miniSearch")
+        imageView.image = image
+        imageView.contentMode = .scaleAspectFit
+
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 32, height: 40))
+        view.addSubview(imageView)
+        searchTxtFld.leftViewMode = .always
+        searchTxtFld.leftView = view
+        searchTxtFld.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+    }
+    
     //MARK:- Objc Methods
+    
+    @objc func textFieldDidChange(sender:UITextField){
+        if sender.text ?? "" == ""{
+            self.viewModel.myorders = self.viewModel.temp
+        }
+        else{
+            self.viewModel.myorders.removeAll()
+            self.viewModel.myorders = viewModel.temp.filter({($0.orderID?.lowercased().contains(sender.text?.lowercased() ?? "") ?? false)})
+        }
+        self.ordersTableView.reloadData()
+    }
+    
+    @objc func didTapCancelOrder(sender:UIButton){
+       
+        self.showAlertWithActionOkandCancel(Title: "Opayn Kart", Message: "Are you sure you want to cancel this order?", OkButtonTitle: "OK", CancelButtonTitle: "Cancel") {
+            self.cancelProduct(orderId: self.viewModel.myorders[sender.tag].orderID ?? "")
+        }
+       
+    }
     
     //MARK:- IBActions
     
@@ -70,6 +109,9 @@ extension MyOrdersViewController:UITableViewDelegate,UITableViewDataSource{
         let orderDate = Singleton.sharedInstance.UTCToLocal(date: viewModel.myorders[indexPath.row].created_at ?? "", fromFormat: "yyyy-MM-dd HH:mm:ss", toFormat: "yyyy-MM-dd")
         cell.dateLbl.text = orderDate
         cell.quantityLbl.text = "Total Qty: \(viewModel.myorders[indexPath.row].products?.count ?? 0)"
+        cell.cancelOrderBtn.tag = indexPath.row
+        cell.cancelOrderBtn.addTarget(self, action: #selector(didTapCancelOrder(sender:)), for: .touchUpInside)
+        
         return cell
     }
     
@@ -92,6 +134,19 @@ extension MyOrdersViewController{
             Indicator.shared.hideProgressView()
             if isSuccess{
                 self.ordersTableView.reloadData()
+            }
+            else{
+                self.showToast(message: message)
+            }
+        }
+    }
+    
+    func cancelProduct(orderId:String){
+        Indicator.shared.showProgressView(self.view)
+        viewModel.cancelOrder(id: orderId) { isSuccess, message in
+            Indicator.shared.hideProgressView()
+            if isSuccess{
+                self.showToast(message: "Order Cancelled succesfully.")
             }
             else{
                 self.showToast(message: message)

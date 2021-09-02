@@ -15,6 +15,8 @@ class MyOrdersTableViewCell: UITableViewCell {
     @IBOutlet weak var dateLbl: UILabel!
     
     @IBOutlet weak var quantityLbl: UILabel!
+    @IBOutlet weak var statusLbl: UILabel!
+    @IBOutlet weak var cancelOrderBtn: UIButton!
     
     
     override func awakeFromNib() {

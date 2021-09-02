@@ -67,9 +67,9 @@ class CartViewModel: BaseAPI {
     }
     
     
-    func productQuantity(id:String,quantity:Int,completion:@escaping(Bool,String)->()){
+    func productQuantity(id:String,quantity:Int,type:String,completion:@escaping(Bool,String)->()){
         
-        let param = ["id":id,"quantity":quantity] as baseParameters
+        let param = ["id":id,"quantity":quantity,"type":type] as baseParameters
         let request = Request(url: (URLS.baseUrl, APISuffix.cartQuantity), method: .post, parameters: param, headers: true)
         super.hitApi(requests: request) { receivedData, message, responseCode in
             if responseCode == 1{

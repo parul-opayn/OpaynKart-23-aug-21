@@ -48,6 +48,29 @@ extension SubOrderDetailsViewController:UITableViewDelegate,UITableViewDataSourc
         cell.orderImage.sd_setImage(with: URL(string: model?.images?.first ?? ""), placeholderImage: #imageLiteral(resourceName: "placeholder Image"), options: .highPriority, context: nil)
         let orderDate = Singleton.sharedInstance.UTCToLocal(date: viewModel.myorders[indexPath.row].created_at ?? "", fromFormat: "yyyy-MM-dd HH:mm:ss", toFormat: "yyyy-MM-dd")
         cell.dateLbl.text = orderDate
+        let status  = model?.status  ?? ""
+        
+        switch status {
+        case "0":
+            cell.statusLbl.text = "Pending"
+            cell.statusLbl.textColor = UIColor(named: "MainOrange")
+            break
+            
+        case "1":
+            cell.statusLbl.text = "Accepted"
+            cell.statusLbl.textColor = .green
+            break
+            
+        case "2":
+            cell.statusLbl.text = "Rejected"
+            cell.statusLbl.textColor = .systemRed
+            break
+       
+        default:
+            cell.statusLbl.text = status
+            cell.statusLbl.textColor = UIColor(named: "MainOrange")
+            break
+        }
         return cell
     }
     

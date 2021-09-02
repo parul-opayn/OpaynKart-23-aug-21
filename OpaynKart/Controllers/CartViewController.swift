@@ -216,7 +216,7 @@ extension CartViewController{
 
     func cartQuantity(pId:String,quantity:Int,atIndex:Int,type:String){
         
-        self.viewModel.productQuantity(id: pId, quantity: quantity){[weak self] isSuccess, message in
+        self.viewModel.productQuantity(id: pId, quantity: quantity,type: type){[weak self] isSuccess, message in
           
             guard let self = self else{return}
             if isSuccess{
